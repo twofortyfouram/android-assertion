@@ -1,0 +1,10 @@
+# This improves obfuscation and moves non-public classes to their own namespace.
+-repackageclasses 'com.twofortyfouram.assertion.private'
+
+# This makes it easier to autocomplete methods in an IDE using this obfuscated library.
+-keepparameternames
+
+-keepattributes EnclosingMethod,InnerClasses
+
+# Keep the public classes of the library.
+-keep public class com.twofortyfouram.assertion.** { public protected *; }
