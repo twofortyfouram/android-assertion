@@ -25,5 +25,5 @@ The build.gradle repositories section would look something like the following:
 And the dependencies section would look something like this:
     
     dependencies {
-        compile group:'com.twofortyfouram', name:'android-assertion', version:'1.0.0+', ext:'aar'
+        compile group:'com.twofortyfouram', name:'android-assertion', version:'1.+'
     }

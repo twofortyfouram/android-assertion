@@ -8,8 +8,8 @@ repositories {
 
 dependencies {
     compile group:'net.jcip', name:'jcip-annotations', version:'1.0'
-    compile group:'com.twofortyfouram', name:'android-annotation', version:'1.0.1+', ext:'aar'
-    instrumentTestCompile group:'com.twofortyfouram', name:'android-test', version:'1.0.1+', ext:'aar'
+    compile group:'com.twofortyfouram', name:'android-annotation', version:'1.+'
+    instrumentTestCompile group:'com.twofortyfouram', name:'android-test', version:'1.+'
 }
 
 android {
@@ -37,7 +37,7 @@ android {
 }
 
 android.libraryVariants.all { variant ->
-    task("generate${variant.name}Javadoc", type: Javadoc) {
+    task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
         description "Generates Javadoc for $variant.name."
         source = variant.javaCompile.source
         ext.androidJar = "${android.plugin.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
