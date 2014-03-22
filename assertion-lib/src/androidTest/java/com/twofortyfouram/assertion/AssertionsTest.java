@@ -232,7 +232,7 @@ public final class AssertionsTest extends TestCase {
     @SmallTest
     public static void testAssertInSet_empty() {
         try {
-            Assertions.assertInSet("test", new String[]{}); //$NON-NLS-1$
+            Assertions.assertInSet("test", (Object[]) new String[]{}); //$NON-NLS-1$
             fail();
         } catch (final AssertionError e) {
             // Expected exception
