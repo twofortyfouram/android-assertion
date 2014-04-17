@@ -15,15 +15,14 @@
 
 package com.twofortyfouram.assertion;
 
-import com.twofortyfouram.annotation.NonNull;
-import com.twofortyfouram.annotation.Nullable;
-
 import net.jcip.annotations.ThreadSafe;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
