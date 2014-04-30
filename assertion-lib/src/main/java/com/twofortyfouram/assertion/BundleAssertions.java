@@ -126,10 +126,10 @@ public final class BundleAssertions {
      *
      * @param bundle      Bundle to check keys of.
      * @param requiredKey Key that {@code bundle} must have mapping to an int value.
-     * @param lowerBound  Inclusive lower bound for {@code requiredKey}'s value. Must be <=
-     *                    {@code upperBound}.
-     * @param upperBound  Inclusive upper bound for {@code requiredKey}'s value. Must be >=
-     *                    {@code lowerBound}.
+     * @param lowerBound  Inclusive lower bound for {@code requiredKey}'s value. Must be less than
+     *                    or equal to {@code upperBound}.
+     * @param upperBound  Inclusive upper bound for {@code requiredKey}'s value. Must be greater
+     *                    than or equal to {@code lowerBound}.
      * @throws AssertionError If {@code bundle} doesn't contain {@code requiredKey} mapping to the
      *                        correct type.
      */
@@ -177,10 +177,10 @@ public final class BundleAssertions {
      *
      * @param bundle      Bundle to check keys of.
      * @param requiredKey Key that {@code bundle} must have mapping to an long value.
-     * @param lowerBound  Inclusive lower bound for {@code requiredKey}'s value. Must be <=
-     *                    {@code upperBound}.
-     * @param upperBound  Inclusive upper bound for {@code requiredKey}'s value. Must be >=
-     *                    {@code lowerBound}.
+     * @param lowerBound  Inclusive lower bound for {@code requiredKey}'s value. Must be less than
+     *                    or equal to {@code upperBound}.
+     * @param upperBound  Inclusive upper bound for {@code requiredKey}'s value. Must be greater
+     *                    than or equal to {@code lowerBound}.
      * @throws AssertionError If {@code bundle} doesn't contain {@code requiredKey} mapping to the
      *                        correct type.
      */
@@ -202,8 +202,9 @@ public final class BundleAssertions {
     /**
      * Asserts {@code bundle} contains a value of the correct type for {@code requiredKey}.
      *
-     * @param bundle      Bundle to check keys of.
-     * @param requiredKey Key that {@code bundle} must have mapping to a non-null Parcelable.
+     * @param bundle        Bundle to check keys of.
+     * @param requiredKey   Key that {@code bundle} must have mapping to a non-null Parcelable.
+     * @param expectedClass Expected class type for the Parcelable {@code requiredKey} maps to.
      * @throws AssertionError If {@code bundle} doesn't contain {@code requiredKey} mapping to the
      *                        correct type.
      */
@@ -342,7 +343,7 @@ public final class BundleAssertions {
      * Asserts {@code bundle} contains exactly {@code count} keys.
      *
      * @param bundle        Bundle to check key count of.
-     * @param expectedCount Expected count of keys in bundle. Must be >= 0.
+     * @param expectedCount Expected count of keys in bundle. Must be greater than or equal to 0.
      * @throws AssertionError If {@code bundle} doesn't contain {@code expectedCount} keys.
      */
     public static void assertKeyCount(@NonNull final Bundle bundle, final int expectedCount)
@@ -393,7 +394,8 @@ public final class BundleAssertions {
                         throw new AssertionError(
                                 formatMessage(
                                         "Object associated with key %s is not available to the Android ClassLoader",
-                                        key)); //$NON-NLS-1$
+                                        key)
+                        ); //$NON-NLS-1$
                     }
 
                     try {
@@ -410,7 +412,8 @@ public final class BundleAssertions {
                     throw new AssertionError(
                             formatMessage(
                                     "Key \"%s\"'s value %s isn't Serializable.  Only primitives or objects implementing Serializable can be stored.  Parcelable is not stable for long-term storage.",
-                                    key, bundle.get(key))); //$NON-NLS-1$
+                                    key, bundle.get(key))
+                    ); //$NON-NLS-1$
                 }
             }
         } finally {
