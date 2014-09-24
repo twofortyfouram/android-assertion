@@ -1,12 +1,11 @@
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     compile group:'net.jcip', name:'jcip-annotations', version:'1.0'
     compile group:'com.android.support', name:'support-annotations', version:'+'
     compile group:'com.twofortyfouram', name:'android-annotation', version:'[1.0.2,3.0['
-    androidTestCompile group:'com.twofortyfouram', name:'android-test', version:'[1.0.2,2.0['
+    androidTestCompile group:'com.twofortyfouram', name:'android-test', version:'[1.0.4,2.0['
 }
 
 android {
@@ -25,7 +24,7 @@ android {
     
     buildTypes {
         debug {
-            testCoverageEnabled true
+            //testCoverageEnabled true
         }
     }
 }
@@ -40,6 +39,10 @@ android.libraryVariants.all { variant ->
         options.links('http://jcip.net.s3-website-us-east-1.amazonaws.com/annotations/doc/', 'http://twofortyfouram.github.io/android-annotation/')
     }
 }
+
+group = MAVEN_GROUP
+archivesBaseName = MAVEN_ARTIFACT_NAME
+version = ANDROID_VERSION_NAME
 
 uploadArchives {
     repositories {
@@ -56,9 +59,6 @@ uploadArchives {
                     }
                 }
             }
-            pom.groupId = MAVEN_GROUP
-            pom.version = ANDROID_VERSION_NAME
-            pom.artifactId = MAVEN_ARTIFACT_NAME
         }
     }
 }
@@ -69,8 +69,5 @@ task installArchives(type: Upload) {
     description "Installs artifacts to mavenLocal."
     repositories.mavenInstaller {
         configuration = configurations.default
-        pom.groupId = MAVEN_GROUP
-        pom.artifactId = MAVEN_ARTIFACT_NAME
-        pom.version = ANDROID_VERSION_NAME
     }
 }
