@@ -183,7 +183,8 @@ public final class Assertions {
      * @throws AssertionError If {@code string} is {@code null} or empty.
      */
     public static void assertNotEmpty(@Nullable final String string, @NonNull final String name) {
-        if (TextUtils.isEmpty(string)) {
+        // Don't use TextUtils.isEmpty(), in order to support unit tests with the mock android.jar
+        if (null == string || 0 == string.length()) {
             throw new AssertionError(
                     formatMessage("%s cannot be null or empty", name)); //$NON-NLS-1$
         }
