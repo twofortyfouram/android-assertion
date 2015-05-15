@@ -5,7 +5,7 @@ sudo: false
 android:
   components:
     - platform-tools-22.0.0
-    - tools-24.1.2
+    - tools-24.3.3
     - build-tools-22.0.1
 
     - android-8
