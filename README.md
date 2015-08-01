@@ -15,16 +15,22 @@ The library is compatible and optimized for Android API Level 8 and above.
 
 # Download
 ## Gradle
-The library is published as an artifact to the two forty four a.m. maven repository.  To use the library, the two forty four a.m. maven repository and the artifact need to be added to your build script.
+The library is published as an artifact to jCenter.  To use the library, the jCenter repository and the artifact need to be added to your build script.
 
 The build.gradle repositories section would look something like the following:
 
     repositories {
-        maven { url 'https://dl.bintray.com/twofortyfouram/maven' }
+        jcenter()
     }
 
 And the dependencies section would look something like this:
     
     dependencies {
-        compile group:'com.twofortyfouram', name:'android-assertion', version:'[1.0.1,2.0['
+        compile group:'com.twofortyfouram', name:'android-assertion', version:'[1.0.4,2.0['
     }
+
+# History
+* 1.0.0: Initial release
+* 1.0.1: Update Android Gradle plugin, which changed the generated BuildConfig
+* 1.0.2: Replace two forty four a.m. nullness annotations with Android support annotations
+* 1.0.4: Reupload artifacts with source and JavaDoc for inclusion in jCenter

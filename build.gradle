@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath group:'com.android.tools.build', name:'gradle', version:"${ANDROID_GRADLE_PLUGIN_VERSION_MATCHER}"
@@ -9,8 +9,7 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenCentral()
-        maven { url 'https://dl.bintray.com/twofortyfouram/maven' }
+        jcenter()
     }
 
     gradle.projectsEvaluated {
