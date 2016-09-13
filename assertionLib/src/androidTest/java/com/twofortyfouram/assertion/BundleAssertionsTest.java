@@ -18,11 +18,14 @@ package com.twofortyfouram.assertion;
 
 import android.location.Address;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
+
+import com.twofortyfouram.assertion.test.SomeSerializable;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -549,5 +552,56 @@ public final class BundleAssertionsTest {
     @Test(expected = AssertionError.class)
     public void assertKeyCount_bad_parameters() {
         BundleAssertions.assertKeyCount(new Bundle(), -1);
+    }
+
+    @SmallTest
+    @Test
+    public void assertSerializable_empty() {
+        BundleAssertions.assertSerializable(new Bundle());
+    }
+
+    @SmallTest
+    @Test
+    public void assertSerializable_recursive() {
+        Bundle bundle = new Bundle();
+        bundle.putBundle("bundle", new Bundle());
+
+        BundleAssertions.assertSerializable(bundle);
+    }
+
+    @SmallTest
+    @Test
+    public void assertSerializable_null_key() {
+        Bundle bundle = new Bundle();
+        bundle.putString(null, "foo");
+
+        BundleAssertions.assertSerializable(bundle);
+    }
+
+    @SmallTest
+    @Test
+    public void assertSerializable_null_value() {
+        Bundle bundle = new Bundle();
+        bundle.putString("foo", null);
+
+        BundleAssertions.assertSerializable(bundle);
+    }
+
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void assertSerializable_custom_serializable() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("foo", new SomeSerializable());
+
+        BundleAssertions.assertSerializable(bundle);
+    }
+
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void assertSerializable_parcelable() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("foo", new Location(LocationManager.GPS_PROVIDER));
+
+        BundleAssertions.assertSerializable(bundle);
     }
 }

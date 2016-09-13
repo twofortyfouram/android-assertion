@@ -15,14 +15,14 @@
 
 package com.twofortyfouram.assertion;
 
-import net.jcip.annotations.ThreadSafe;
-
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import net.jcip.annotations.ThreadSafe;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -385,8 +385,8 @@ public final class BundleAssertions {
                 final Object value = bundle.get(key);
 
                 if (value instanceof Bundle) {
-                    // recursively serialize
-                    assertSerializable(bundle);
+                    // recursively check sub bundles
+                    assertSerializable((Bundle) value);
                 } else if (value instanceof Serializable) {
                     try {
                         ClassLoader.getSystemClassLoader().loadClass(value.getClass().getName());
