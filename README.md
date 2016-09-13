@@ -34,3 +34,4 @@ And the dependencies section would look something like this:
 * 1.0.1: Update Android Gradle plugin, which changed the generated BuildConfig
 * 1.0.2: Replace two forty four a.m. nullness annotations with Android support annotations
 * 1.0.4: Reupload artifacts with source and JavaDoc for inclusion in jCenter
+* 1.1.0: Added assertions for Maps

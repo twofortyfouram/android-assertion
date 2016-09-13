@@ -27,7 +27,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -204,6 +206,39 @@ public final class AssertionsTest {
 
     @SmallTest
     @Test
+    public void assertNoNullElements_map_non_empty() {
+        Assertions
+                .assertNoNullElements(Collections.singletonMap("key", "value"), "test"); //$NON-NLS
+    }
+
+    @SmallTest
+    @Test
+    public void assertNoNullElements_map_empty() {
+        Assertions.assertNoNullElements(Collections.emptyMap(), "test"); //$NON-NLS-1$
+    }
+
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void assertNoNullElements_map_null_map() {
+        Assertions.assertNoNullElements((Map) null, "test"); //$NON-NLS-1$
+    }
+
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void assertNoNullElements_map_null_key() {
+        Assertions
+                .assertNoNullElements(Collections.singletonMap(null, "value"), "test"); //$NON-NLS
+    }
+
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void assertNoNullElements_map_null_value() {
+        Assertions
+                .assertNoNullElements(Collections.singletonMap("key", null), "test"); //$NON-NLS
+    }
+
+    @SmallTest
+    @Test
     public void assertInSet() {
         Assertions.assertInSet("test", "test"); //$NON-NLS-1$ //$NON-NLS-2$
         Assertions.assertInSet("test", "foo", "test"); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
@@ -250,6 +285,24 @@ public final class AssertionsTest {
     @Test(expected = AssertionError.class)
     public void assertNotEmpty_null_string() {
         Assertions.assertNotEmpty((String) null, "test"); //$NON-NLS-1$
+    }
+
+    @SmallTest
+    @Test
+    public void assertNotEmpty_not_empty_map() {
+        Assertions.assertNotEmpty(Collections.singletonMap("key", "value"), "test"); //$NON-NLS
+    }
+
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void assertNotEmpty_empty_map() {
+        Assertions.assertNotEmpty(Collections.emptyMap(), "test"); //$NON-NLS-1$
+    }
+
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void assertNotEmpty_null_map() {
+        Assertions.assertNotEmpty((Map) null, "test"); //$NON-NLS-1$
     }
 
     @SmallTest

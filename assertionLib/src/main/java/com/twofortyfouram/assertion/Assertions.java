@@ -23,6 +23,7 @@ import net.jcip.annotations.ThreadSafe;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Runtime assertions.
@@ -154,6 +155,27 @@ public final class Assertions {
     }
 
     /**
+     * @param map  Map to check for being null or containing null keys or null values.
+     * @param name Name of the Map for human-readable exceptions.
+     * @throws AssertionError If {@code map} is null or empty.
+     */
+    public static void assertNoNullElements(@Nullable final Map<?, ?> map,
+            @Nullable final String name) {
+        assertNotNull(map, name);
+
+        for (final Map.Entry<?, ?> entry : map.entrySet()) {
+            if (null == entry.getKey()) {
+                throw new AssertionError(formatMessage(
+                        "%s cannot contain null keys", name)); //$NON-NLS-1$
+            }
+            if (null == entry.getValue()) {
+                throw new AssertionError(formatMessage(
+                        "%s cannot contain null values", name)); //$NON-NLS-1$
+            }
+        }
+    }
+
+    /**
      * @param obj Object to check if it is within {@code set}.
      * @param set Allowed elements for {@code obj}. {@code set} must not be null, but may
      *            contain null elements.
@@ -202,6 +224,21 @@ public final class Assertions {
         if (null == string || 0 == string.length()) {
             throw new AssertionError(
                     formatMessage("%s cannot be null or empty", name)); //$NON-NLS-1$
+        }
+    }
+
+    /**
+     * @param map  Map to check for being {@code null} or empty.
+     * @param name Name of the Map for human-readable exceptions.
+     * @throws AssertionError If {@code map} is {@code null} or empty.
+     */
+    public static void assertNotEmpty(@Nullable final Map<?, ?> map, @NonNull final String name) {
+        // Don't use TextUtils.isEmpty(), in order to support unit tests with the mock android.jar
+        assertNotNull(map, name);
+
+        if (map.isEmpty()) {
+            throw new AssertionError(
+                    formatMessage("%s cannot be empty", name)); //$NON-NLS-1$
         }
     }
 
