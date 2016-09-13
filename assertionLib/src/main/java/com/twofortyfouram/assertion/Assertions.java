@@ -1,6 +1,6 @@
 /*
  * android-assertion-lib https://github.com/twofortyfouram/android-assertion
- * Copyright 2014 two forty four a.m. LLC
+ * Copyright 2014-2016 two forty four a.m. LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,12 +15,11 @@
 
 package com.twofortyfouram.assertion;
 
-import net.jcip.annotations.ThreadSafe;
-
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
+
+import net.jcip.annotations.ThreadSafe;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -42,6 +41,10 @@ public final class Assertions {
      */
     public static void assertInRangeInclusive(final int actual, final int minInclusive,
             final int maxInclusive, @NonNull final String name) {
+        if (minInclusive > maxInclusive) {
+            throw new IllegalArgumentException("maxInclusive is not >= minInclusive"); //$NON-NLS-1$
+        }
+
         if (actual < minInclusive || actual > maxInclusive) {
             throw new AssertionError(formatMessage(
                     "%s=%d is not in the range [%d, %d]", name, actual, minInclusive,
@@ -60,6 +63,10 @@ public final class Assertions {
      */
     public static void assertInRangeInclusive(final long actual, final long minInclusive,
             final long maxInclusive, @NonNull final String name) {
+        if (minInclusive > maxInclusive) {
+            throw new IllegalArgumentException("maxInclusive is not >= minInclusive"); //$NON-NLS-1$
+        }
+
         if (actual < minInclusive || actual > maxInclusive) {
             throw new AssertionError(formatMessage(
                     "%s=%d is not in the range [%d, %d]", name, actual, minInclusive,
@@ -78,6 +85,10 @@ public final class Assertions {
      */
     public static void assertInRangeInclusive(final float actual, final float minInclusive,
             final float maxInclusive, @NonNull final String name) {
+        if (Float.compare(minInclusive, maxInclusive) > 0) {
+            throw new IllegalArgumentException("maxInclusive is not >= minInclusive"); //$NON-NLS-1$
+        }
+
         if (0 > Float.compare(actual, minInclusive) || 0 < Float.compare(actual, maxInclusive)) {
             throw new AssertionError(formatMessage(
                     "%s=%f is not in the range [%f, %f]", name, actual, minInclusive,
@@ -97,6 +108,10 @@ public final class Assertions {
      */
     public static void assertInRangeInclusive(final double actual, final double minInclusive,
             final double maxInclusive, @NonNull final String name) {
+        if (Double.compare(minInclusive, maxInclusive) > 0) {
+            throw new IllegalArgumentException("maxInclusive is not >= minInclusive"); //$NON-NLS-1$
+        }
+
         if (0 > Double.compare(actual, minInclusive) || 0 < Double.compare(actual, maxInclusive)) {
             throw new AssertionError(formatMessage(
                     "%s=%f is not in the range [%f, %f]", name, actual, minInclusive,
@@ -124,7 +139,7 @@ public final class Assertions {
     /**
      * @param collection Collection to check for being null or containing null elements.
      * @param name       Name of the Collection for human-readable exceptions.
-     * @throws AssertionError If {@code string} is null or empty.
+     * @throws AssertionError If {@code collection} is null or empty.
      */
     public static void assertNoNullElements(@Nullable final Collection<?> collection,
             @Nullable final String name) {
