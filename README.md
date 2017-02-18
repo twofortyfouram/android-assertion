@@ -1,12 +1,13 @@
-[![Build Status](https://travis-ci.org/twofortyfouram/android-assertion.png?branch=master)](https://travis-ci.org/twofortyfouram/android-assertion)
+[![CircleCI](https://circleci.com/gh/twofortyfouram/android-assertion.svg?style=svg)](https://circleci.com/gh/twofortyfouram/android-assertion)
+
 # Overview
-The android-assert-lib implements runtime assertions for Android application development.  Java's ```assert``` mechanism does not work consistently on Android and Google has lint checks to look for this Android antipattern.  Although ```assert``` can sometimes be used on Android, it is disabled by default and enabling it requires physical access to the device.
+The android-assertion-lib implements runtime assertions for Android application development.  Java's ```assert``` mechanism does not work consistently on Android and Google has lint checks to look for this Android antipattern.  Although ```assert``` can sometimes be used on Android, it is disabled by default and enabling it requires physical access to the device.
 
 The benefit of this library is that the developer has direct control over whether assertions are enabled or not.  For example, assertions could be enabled for debug builds and stripped out with ProGuard for release builds.
 
 
 # API Reference
-JavaDocs for the library are published [here](http://twofortyfouram.github.io/android-assertion).
+JavaDocs for the library are published [here](https://twofortyfouram.github.io/android-assertion).
 
 
 # Compatibility
@@ -26,7 +27,7 @@ The build.gradle repositories section would look something like the following:
 And the dependencies section would look something like this:
     
     dependencies {
-        compile group:'com.twofortyfouram', name:'android-assertion', version:'[1.0.4,2.0['
+        compile group:'com.twofortyfouram', name:'android-assertion', version:'[1.1.1,2.0['
     }
 
 # History
