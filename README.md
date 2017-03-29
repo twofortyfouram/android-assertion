@@ -27,7 +27,7 @@ The build.gradle repositories section would look something like the following:
 And the dependencies section would look something like this:
     
     dependencies {
-        compile group:'com.twofortyfouram', name:'android-assertion', version:'[1.1.1,2.0['
+        compile group:'com.twofortyfouram', name:'android-assertion', version:'[1.2.0,2.0['
     }
 
 # History
@@ -37,3 +37,4 @@ And the dependencies section would look something like this:
 * 1.0.4: Reupload artifacts with source and JavaDoc for inclusion in jCenter
 * 1.1.0: Added assertions for Maps
 * 1.1.1: Fix infinite loop in BundleAssertions.  Thanks @csibesz07 for reporting this issue
+* 1.2.0: Added assertion for empty Collection
