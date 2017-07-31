@@ -37,7 +37,7 @@ test:
   override:
     - ./gradlew assemble assembleDebugAndroidTest lint findbugs releaseJavadoc dependencyUpdates --profile
 
-    - PATH="/home/ubuntu/mybin/gcloud/bin:${PATH}" && parallel tools/ci/firebase-test-lab-test-module.sh assertionLib ${GCLOUD_DEFAULT_BUCKET} {1} ':::' "model=Nexus4,version=19,orientation=portrait" "model=NexusLowRes,version=25,orientation=portrait"
+    - PATH="/home/ubuntu/mybin/gcloud/bin:${PATH}" && parallel tools/ci/firebase-test-lab-test-module.sh assertionLib ${GCLOUD_DEFAULT_BUCKET} {1} ':::' "model=Nexus4,version=19,orientation=portrait" "model=NexusLowRes,version=26,orientation=portrait"
 
 
     # Convert the coverage.ec files into readable reports
