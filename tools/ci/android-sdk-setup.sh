@@ -8,16 +8,18 @@
 #
 # The script expects several parameters in this order:
 # 1. android home directory, e.g. ~/android-sdk
-# 2. Android tools version, e.g. 25.2.5
+# 2. Android tools version, e.g. 3859397
 # 3. flag path, e.g. ~/flags/android-sdk-setup
-# 4. android sdk components, as used by `sdkmanager`.  e.g. "platforms;android-25" "build-tools;25.0.2" "platform-tools" "docs" "extras;android;m2repository"
+# 4. channel, e.g. 0
+# 5. android sdk components, as used by `sdkmanager`.  e.g. "platforms;android-25" "build-tools;25.0.2" "platform-tools" "docs" "extras;android;m2repository"
 
 set -e
 
 android_sdk_installation_dir="$1"
 android_tools_version="$2"
 android_sdk_flag_file="$3"
-shift 3
+android_sdk_channel="$4"
+shift 4
 android_sdk_components_to_install=("$@")
 
 if ! test -f ${android_sdk_flag_file}; then
@@ -26,13 +28,14 @@ if ! test -f ${android_sdk_flag_file}; then
   # Optionally download the SDK, as it might already exist in some environments.
   if ! test -d $android_sdk_installation_dir; then
     mkdir -p $android_sdk_installation_dir
-    curl -o $HOME/android-sdk-temp.zip "https://dl.google.com/android/repository/tools_r${android_tools_version}-linux.zip"
+    curl -o $HOME/android-sdk-temp.zip "https://dl.google.com/android/repository/sdk-tools-linux-${android_tools_version}.zip"
     unzip $HOME/android-sdk-temp.zip -d $android_sdk_installation_dir
     rm $HOME/android-sdk-temp.zip
   fi
 
   mkdir -p ${android_sdk_installation_dir}/licenses/
   cp tools/ci/android-sdk-license ${android_sdk_installation_dir}/licenses/android-sdk-license
+  cp tools/ci/android-sdk-preview-license ${android_sdk_installation_dir}/licenses/android-sdk-preview-license
 
   if ! test -d ~/.android; then
     mkdir ~/.android
@@ -42,7 +45,7 @@ if ! test -f ${android_sdk_flag_file}; then
 
   for component in ${android_sdk_components_to_install[@]}; do
       echo "Installing ${component}"
-      ${android_sdk_installation_dir}/tools/bin/sdkmanager ${component}
+      ${android_sdk_installation_dir}/tools/bin/sdkmanager --channel=${android_sdk_channel} ${component}
   done
 
   touch ${android_sdk_flag_file}
