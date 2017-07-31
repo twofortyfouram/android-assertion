@@ -11,7 +11,7 @@ JavaDocs for the library are published [here](https://twofortyfouram.github.io/a
 
 
 # Compatibility
-The library is compatible and optimized for Android API Level 8 and above.
+The library is compatible and optimized for Android API Level 15 and above.
 
 
 # Download
@@ -27,7 +27,7 @@ The build.gradle repositories section would look something like the following:
 And the dependencies section would look something like this:
     
     dependencies {
-        compile group:'com.twofortyfouram', name:'android-assertion', version:'[1.2.0,2.0['
+        compile group:'com.twofortyfouram', name:'android-assertion', version:'[2.0.0,3.0)'
     }
 
 # History
@@ -38,3 +38,9 @@ And the dependencies section would look something like this:
 * 1.1.0: Added assertions for Maps
 * 1.1.1: Fix infinite loop in BundleAssertions.  Thanks @csibesz07 for reporting this issue
 * 1.2.0: Added assertion for empty Collection
+* 2.0.0:
+    * assertNotNull now returns a `@NonNull` value, enabling sanitization of `@Nullable`
+    * Added a few limited assertions against `PersistableBundle`
+    * Added `CursorAssertions`
+    * Min API 15
+    * Espresso 3.0.0

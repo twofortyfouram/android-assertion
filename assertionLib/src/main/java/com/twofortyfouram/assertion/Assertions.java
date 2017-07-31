@@ -206,13 +206,17 @@ public final class Assertions {
     /**
      * @param object Object to check for being {@code null}.
      * @param name   Name of the object for human-readable exceptions.
+     * @return {@code object} sanitized as being non-null.
      * @throws AssertionError If {@code object} is {@code null}.
      */
-    public static void assertNotNull(@Nullable final Object object, @NonNull final String name) {
+    @NonNull
+    public static <T> T assertNotNull(@Nullable final T object, @NonNull final String name) {
         if (null == object) {
             throw new AssertionError(
                     formatMessage("%s cannot be null", name)); //$NON-NLS-1$
         }
+
+        return object;
     }
 
     /**
@@ -263,6 +267,15 @@ public final class Assertions {
     public static void assertIsMainThread() {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             throw new AssertionError("Current thread is not the main thread"); //$NON-NLS-1$
+        }
+    }
+
+    /**
+     * @throws AssertionError If the current thread is not the main application thread.
+     */
+    public static void assertIsNotMainThread() {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            throw new AssertionError("Current thread is the main thread"); //$NON-NLS-1$
         }
     }
 

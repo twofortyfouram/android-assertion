@@ -20,8 +20,10 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 
 import net.jcip.annotations.ThreadSafe;
 
@@ -46,6 +48,26 @@ public final class BundleAssertions {
      * @throws AssertionError If {@code bundle} doesn't contain {@code requiredKey}.
      */
     public static void assertHasKey(@NonNull final Bundle bundle,
+            @Nullable final String requiredKey)
+            throws AssertionError {
+        Assertions.assertNotNull(bundle, "bundle"); //$NON-NLS-1$
+
+        if (!bundle.containsKey(requiredKey)) {
+            final String message = formatMessage("Required extra %s is missing", //$NON-NLS-1$
+                    requiredKey);
+            throw new AssertionError(message);
+        }
+    }
+
+    /**
+     * Asserts {@code bundle} contains a mapping for {@code requiredKey}.
+     *
+     * @param bundle      Bundle to check keys of.
+     * @param requiredKey Key that {@code bundle} must have mapping for.
+     * @throws AssertionError If {@code bundle} doesn't contain {@code requiredKey}.
+     */
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    public static void assertHasKey(@NonNull final PersistableBundle bundle,
             @Nullable final String requiredKey)
             throws AssertionError {
         Assertions.assertNotNull(bundle, "bundle"); //$NON-NLS-1$
@@ -92,6 +114,27 @@ public final class BundleAssertions {
         if (null == bundle.getByteArray(requiredKey)) {
             final String message = formatMessage(
                     "Extra %s appears to be the wrong type or null.  It must be a byte[]",
+                    //$NON-NLS-1$
+                    requiredKey);
+            throw new AssertionError(message);
+        }
+    }
+
+    /**
+     * Asserts {@code bundle} contains a value of the correct type for {@code requiredKey}.
+     *
+     * @param bundle      Bundle to check keys of.
+     * @param requiredKey Key that {@code bundle} must have mapping to a {@code String[]} value.
+     * @throws AssertionError If {@code bundle} doesn't contain {@code requiredKey} mapping to the
+     *                        correct type.
+     */
+    public static void assertHasStringArray(@NonNull final Bundle bundle,
+            @Nullable final String requiredKey) throws AssertionError {
+        assertHasKey(bundle, requiredKey);
+
+        if (null == bundle.getStringArray(requiredKey)) {
+            final String message = formatMessage(
+                    "Extra %s appears to be the wrong type or null.  It must be a String[]",
                     //$NON-NLS-1$
                     requiredKey);
             throw new AssertionError(message);
@@ -348,6 +391,30 @@ public final class BundleAssertions {
      * @throws AssertionError If {@code bundle} doesn't contain {@code expectedCount} keys.
      */
     public static void assertKeyCount(@NonNull final Bundle bundle, final int expectedCount)
+            throws AssertionError {
+        Assertions.assertNotNull(bundle, "bundle"); //$NON-NLS-1$
+        Assertions.assertInRangeInclusive(expectedCount, 0, Integer.MAX_VALUE,
+                "expectedCount"); //$NON-NLS-1$
+
+        if (expectedCount != bundle.keySet().size()) {
+            final String message = formatMessage(
+                    "bundle must contain %d keys, but currently contains %d keys: %s",
+                    expectedCount, //$NON-NLS-1$
+                    bundle.keySet().size(), bundle.keySet().toString());
+
+            throw new AssertionError(message);
+        }
+    }
+
+    /**
+     * Asserts {@code bundle} contains exactly {@code count} keys.
+     *
+     * @param bundle        Bundle to check key count of.
+     * @param expectedCount Expected count of keys in bundle. Must be greater than or equal to 0.
+     * @throws AssertionError If {@code bundle} doesn't contain {@code expectedCount} keys.
+     */
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    public static void assertKeyCount(@NonNull final PersistableBundle bundle, final int expectedCount)
             throws AssertionError {
         Assertions.assertNotNull(bundle, "bundle"); //$NON-NLS-1$
         Assertions.assertInRangeInclusive(expectedCount, 0, Integer.MAX_VALUE,

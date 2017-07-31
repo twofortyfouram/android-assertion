@@ -36,6 +36,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.sameInstance;
 
 @RunWith(AndroidJUnit4.class)
 public final class AssertionsTest {
@@ -69,27 +71,27 @@ public final class AssertionsTest {
     @SmallTest
     @Test(expected = AssertionError.class)
     public void assertInRangeInclusive_long_below() {
-        Assertions.assertInRangeInclusive(-1l, 0l, 5l, "test");  //$NON-NLS-1$
+        Assertions.assertInRangeInclusive(-1L, 0L, 5L, "test");  //$NON-NLS-1$
     }
 
     @SmallTest
     @Test
     public void assertInRangeInclusive_long_in_range() {
-        Assertions.assertInRangeInclusive(0l, 0l, 5l, "test");  //$NON-NLS-1$
-        Assertions.assertInRangeInclusive(3l, 0l, 5l, "test");  //$NON-NLS-1$
-        Assertions.assertInRangeInclusive(5l, 0l, 5l, "test");  //$NON-NLS-1$
+        Assertions.assertInRangeInclusive(0L, 0L, 5L, "test");  //$NON-NLS-1$
+        Assertions.assertInRangeInclusive(3L, 0L, 5L, "test");  //$NON-NLS-1$
+        Assertions.assertInRangeInclusive(5L, 0L, 5L, "test");  //$NON-NLS-1$
     }
 
     @SmallTest
     @Test(expected = AssertionError.class)
     public void assertInRangeInclusive_long_above() {
-        Assertions.assertInRangeInclusive(6l, 0l, 5l, "test");  //$NON-NLS-1$
+        Assertions.assertInRangeInclusive(6L, 0L, 5L, "test");  //$NON-NLS-1$
     }
 
     @SmallTest
     @Test(expected = IllegalArgumentException.class)
     public void assertInRangeInclusive_long_bad_range() {
-        Assertions.assertInRangeInclusive(0l, 5l, 0l, "test");  //$NON-NLS-1$
+        Assertions.assertInRangeInclusive(0L, 5L, 0L, "test");  //$NON-NLS-1$
     }
 
     @SmallTest
@@ -147,7 +149,7 @@ public final class AssertionsTest {
     @SmallTest
     @Test
     public void assertNoNullElements_collection_non_empty() {
-        final LinkedList<String> list = new LinkedList<String>();
+        final LinkedList<String> list = new LinkedList<>();
         list.add("test"); //$NON-NLS-1$
 
         Assertions.assertNoNullElements(list, "test"); //$NON-NLS-1$
@@ -168,7 +170,7 @@ public final class AssertionsTest {
     @SmallTest
     @Test(expected = AssertionError.class)
     public void assertNoNullElements_collection_null_element() {
-        final LinkedList<String> list = new LinkedList<String>();
+        final LinkedList<String> list = new LinkedList<>();
         list.add("test"); //$NON-NLS-1$
         list.add(null);
 
@@ -261,7 +263,10 @@ public final class AssertionsTest {
     @SmallTest
     @Test
     public void assertNotNull_not_null() {
-        Assertions.assertNotNull("test", "test"); //$NON-NLS-1$//$NON-NLS-2$
+        final String result = Assertions.assertNotNull("test", "test"); //$NON-NLS-1$//$NON-NLS-2$
+
+        assertThat(result, notNullValue());
+        assertThat(result, sameInstance("test"));
     }
 
     @SmallTest
@@ -346,7 +351,6 @@ public final class AssertionsTest {
 
                     latch.countDown();
                 }
-
             });
 
             assertThat(latch.await(250, TimeUnit.MILLISECONDS), is(true));
@@ -363,14 +367,62 @@ public final class AssertionsTest {
         final CountDownLatch latch = new CountDownLatch(1);
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-
             @Override
             public void run() {
                 Assertions.assertIsMainThread();
 
                 latch.countDown();
             }
+        });
 
+        assertThat(latch.await(1 * DateUtils.SECOND_IN_MILLIS, TimeUnit.MILLISECONDS), is(true));
+    }
+
+
+    @SmallTest
+    @Test
+    public void assertIsNotMainThread_not_on_main() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        HandlerThread thread = null;
+        try {
+            thread = new HandlerThread("test thread", android.os.Process.THREAD_PRIORITY_DEFAULT);
+            thread.start();
+            new Handler(thread.getLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+
+                    Assertions.assertIsNotMainThread();
+
+                    latch.countDown();
+                }
+            });
+
+            assertThat(latch.await(250, TimeUnit.MILLISECONDS), is(true));
+        } finally {
+            if (null != thread) {
+                thread.getLooper().quit();
+            }
+        }
+    }
+
+    @SmallTest
+    @Test
+    public void assertIsNotMainThread_on_main() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Assertions.assertIsNotMainThread();
+                    Assert.fail();
+                } catch (final AssertionError e) {
+                    // Expected exception
+                }
+
+                latch.countDown();
+            }
         });
 
         assertThat(latch.await(1 * DateUtils.SECOND_IN_MILLIS, TimeUnit.MILLISECONDS), is(true));

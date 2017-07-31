@@ -22,6 +22,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
@@ -32,6 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Locale;
+
 
 @RunWith(AndroidJUnit4.class)
 public final class BundleAssertionsTest {
@@ -48,7 +50,7 @@ public final class BundleAssertionsTest {
     @Test
     public void hasKey_valid_int() {
         final Bundle bundle = new Bundle();
-        bundle.putInt("test_key", 1);
+        bundle.putInt("test_key", 1); //$NON-NLS-1$
 
         BundleAssertions.assertHasKey(bundle, "test_key"); //$NON-NLS-1$
     }
@@ -57,6 +59,35 @@ public final class BundleAssertionsTest {
     @Test
     public void hasKey_valid_null() {
         final Bundle bundle = new Bundle();
+        bundle.putString(null, null);
+
+        BundleAssertions.assertHasKey(bundle, null);
+    }
+
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.LOLLIPOP)
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void hasKey_persistable_missing() {
+        final PersistableBundle bundle = new PersistableBundle();
+
+        BundleAssertions.assertHasKey(bundle, "test_key"); //$NON-NLS-1$
+    }
+
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.LOLLIPOP)
+    @SmallTest
+    @Test
+    public void hasKey_persistable_valid_int() {
+        final PersistableBundle bundle = new PersistableBundle();
+        bundle.putInt("test_key", 1);
+
+        BundleAssertions.assertHasKey(bundle, "test_key"); //$NON-NLS-1$
+    }
+
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.LOLLIPOP)
+    @SmallTest
+    @Test
+    public void hasKey_persistable_valid_null() {
+        final PersistableBundle bundle = new PersistableBundle();
         bundle.putString(null, null);
 
         BundleAssertions.assertHasKey(bundle, null);
@@ -133,6 +164,42 @@ public final class BundleAssertionsTest {
         bundle.putByteArray("test_key", new byte[0]); //$NON-NLS-1$
 
         BundleAssertions.assertHasByteArray(bundle, "test_key"); //$NON-NLS-1$
+    }
+
+
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void hasStringArray_missing() {
+        final Bundle bundle = new Bundle();
+
+        BundleAssertions.assertHasStringArray(bundle, "test_key"); //$NON-NLS-1$
+    }
+
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void hasStringArray_wrong_type_null() {
+        final Bundle bundle = new Bundle();
+        bundle.putString("test_key", null); //$NON-NLS-1$
+
+        BundleAssertions.assertHasStringArray(bundle, "test_key"); //$NON-NLS-1$
+    }
+
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void hasStringArray_wrong_type_non_null() {
+        final Bundle bundle = new Bundle();
+        bundle.putString("test_key", "foo"); //$NON-NLS-1$ //$NON-NLS-2$
+
+        BundleAssertions.assertHasStringArray(bundle, "test_key"); //$NON-NLS-1$
+    }
+
+    @SmallTest
+    @Test
+    public void hasStringArray_valid() {
+        final Bundle bundle = new Bundle();
+        bundle.putStringArray("test_key", new String[0]); //$NON-NLS-1$
+
+        BundleAssertions.assertHasStringArray(bundle, "test_key"); //$NON-NLS-1$
     }
 
     @SmallTest
@@ -405,9 +472,9 @@ public final class BundleAssertionsTest {
         bundle.putString("test_key", "test_value"); //$NON-NLS-1$ //$NON-NLS-2$
 
         BundleAssertions.assertHasString(bundle, "test_key",
-                new String[]{"test_value"}); //$NON-NLS-1$ //$NON-NLS-2$
+                "test_value"); //$NON-NLS-1$ //$NON-NLS-2$
         BundleAssertions.assertHasString(bundle, "test_key",
-                new String[]{"bork", "test_value"}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                "bork", "test_value"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
     @SmallTest
@@ -417,7 +484,7 @@ public final class BundleAssertionsTest {
         bundle.putString("test_key", "test_value"); //$NON-NLS-1$ //$NON-NLS-2$
 
         BundleAssertions.assertHasString(bundle, "test_key",
-                new String[]{"TEST_VALUE"}); //$NON-NLS-1$ //$NON-NLS-2$
+                "TEST_VALUE"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @SmallTest
@@ -427,7 +494,7 @@ public final class BundleAssertionsTest {
         bundle.putString("test_key", "test_value"); //$NON-NLS-1$ //$NON-NLS-2$
 
         BundleAssertions.assertHasString(bundle, "test_key",
-                new String[]{"bork"}); //$NON-NLS-1$ //$NON-NLS-2$
+                "bork"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @SmallTest
@@ -444,9 +511,8 @@ public final class BundleAssertionsTest {
         final Bundle bundle = new Bundle();
         bundle.putString("test_key", ""); //$NON-NLS-1$ //$NON-NLS-2$
 
-        BundleAssertions
-                .assertHasString(bundle, "test_key",
-                        new String[]{""}); //$NON-NLS-1$ //$NON-NLS-2$
+        BundleAssertions.assertHasString(bundle, "test_key",
+                ""); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @SmallTest
@@ -555,6 +621,41 @@ public final class BundleAssertionsTest {
         BundleAssertions.assertKeyCount(new Bundle(), -1);
     }
 
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.LOLLIPOP)
+    @SmallTest
+    @Test
+    public void assertKeyCount_persistable_valid() {
+        BundleAssertions.assertKeyCount(new PersistableBundle(), 0);
+
+        final Bundle bundle = new Bundle();
+        bundle.putInt("test_key", 1); //$NON-NLS-1$
+
+        BundleAssertions.assertKeyCount(bundle, 1);
+    }
+
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.LOLLIPOP)
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void assertKeyCount_persistable_invalid_empty() {
+        BundleAssertions.assertKeyCount(new PersistableBundle(), 1);
+    }
+
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.LOLLIPOP)
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void assertKeyCount_persistable_invalid_non_empty() {
+        final PersistableBundle bundle = new PersistableBundle();
+        bundle.putInt("test_key", 1); //$NON-NLS-1$
+        BundleAssertions.assertKeyCount(bundle, 0);
+    }
+
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.LOLLIPOP)
+    @SmallTest
+    @Test(expected = AssertionError.class)
+    public void assertKeyCount_persistable_bad_parameters() {
+        BundleAssertions.assertKeyCount(new PersistableBundle(), -1);
+    }
+
     @SmallTest
     @Test
     public void assertSerializable_empty() {
@@ -564,8 +665,8 @@ public final class BundleAssertionsTest {
     @SmallTest
     @Test
     public void assertSerializable_recursive() {
-        Bundle bundle = new Bundle();
-        bundle.putBundle("bundle", new Bundle());
+        final Bundle bundle = new Bundle();
+        bundle.putBundle("bundle", new Bundle()); //$NON-NLS-1$
 
         BundleAssertions.assertSerializable(bundle);
     }
@@ -573,8 +674,8 @@ public final class BundleAssertionsTest {
     @SmallTest
     @Test
     public void assertSerializable_null_key() {
-        Bundle bundle = new Bundle();
-        bundle.putString(null, "foo");
+        final Bundle bundle = new Bundle();
+        bundle.putString(null, "foo"); //$NON-NLS-1$
 
         BundleAssertions.assertSerializable(bundle);
     }
@@ -582,8 +683,8 @@ public final class BundleAssertionsTest {
     @SmallTest
     @Test
     public void assertSerializable_null_value() {
-        Bundle bundle = new Bundle();
-        bundle.putString("foo", null);
+        final Bundle bundle = new Bundle();
+        bundle.putString("foo", null); //$NON-NLS-1$
 
         BundleAssertions.assertSerializable(bundle);
     }
@@ -591,8 +692,8 @@ public final class BundleAssertionsTest {
     @SmallTest
     @Test(expected = AssertionError.class)
     public void assertSerializable_custom_serializable() {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("foo", new SomeSerializable());
+        final Bundle bundle = new Bundle();
+        bundle.putSerializable("foo", new SomeSerializable()); //$NON-NLS-1$
 
         BundleAssertions.assertSerializable(bundle);
     }
@@ -600,8 +701,8 @@ public final class BundleAssertionsTest {
     @SmallTest
     @Test(expected = AssertionError.class)
     public void assertSerializable_parcelable() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("foo", new Location(LocationManager.GPS_PROVIDER));
+        final Bundle bundle = new Bundle();
+        bundle.putParcelable("foo", new Location(LocationManager.GPS_PROVIDER)); //$NON-NLS-1$
 
         BundleAssertions.assertSerializable(bundle);
     }
