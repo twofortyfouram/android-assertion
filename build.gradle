@@ -2,7 +2,7 @@ apply plugin: 'com.github.ben-manes.versions'
 
 buildscript {
     repositories {
-        maven { url 'https://maven.google.com' }
+        google()
         jcenter()
     }
     dependencies {
@@ -13,7 +13,7 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'https://maven.google.com' }
+        google()
         jcenter()
     }
 
